@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGD Auto – Diagnostic & Solutions Auto IDF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:  #0A0A0F;
+    --dark:   #10101A;
+    --card:   #141420;
+    --card2:  #181828;
+    --blue:   #1E6FFF;
+    --blue2:  #0A4FCC;
+    --chrome: #C8D8E8;
+    --white:  #FFFFFF;
+    --gold:   #F0A500;
+    --green:  #00D68F;
+    --muted:  #8899AA;
+    --border: rgba(255,255,255,.07);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,15,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(30,111,255,.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+
+  .nav-logo span { color: var(--blue); }
+
+  .nav-links {
+    display: flex;
+    gap: 6px;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: color .2s, background .2s;
+  }
+
+  .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.06); }
+
+  .nav-cta {
+    background: var(--blue);
+    color: var(--white) !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-weight: 600 !important;
+  }
+
+  .nav-cta:hover { background: var(--blue2) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, #0D1A3A 0%, var(--black) 70%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(30,111,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,111,255,.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .scan-line {
+    position: absolute;
+    top: 0; left: -60%;
+    width: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--chrome), transparent);
+    animation: scan 3.2s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scan {
+    0%   { top: 0%;   left: -60%; opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { top: 100%; left: 80%;  opacity: 0; }
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(30,111,255,.12);
+    border: 1px solid rgba(30,111,255,.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--chrome);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+
+  .dot-live {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(.7); }
+  }
+
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(36px, 8vw, 68px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 .blue { color: var(--blue); }
+  .hero h1 .chrome { color: var(--chrome); }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue);
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background .2s, transform .1s;
+  }
+
+  .btn-primary:hover { background: var(--blue2); transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+    color: var(--chrome);
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    transition: background .2s;
+  }
+
+  .btn-secondary:hover { background: rgba(255,255,255,.1); }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    padding: 72px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .section-eyebrow {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30,111,255,.3), transparent);
+    margin: 0;
+  }
+
+  /* ─── SERVICES ─── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: border-color .25s, transform .2s;
+  }
+
+  .service-card:hover {
+    border-color: rgba(30,111,255,.4);
+    transform: translateY(-2px);
+  }
+
+  .service-icon-wrap {
+    width: 48px; height: 48px;
+    background: rgba(30,111,255,.12);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .service-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+
+  .service-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .service-price {
+    display: inline-block;
+    background: rgba(30,111,255,.15);
+    border: 1px solid rgba(30,111,255,.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  /* ─── PROCESS ─── */
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+  }
+
+  .process-step {
+    text-align: center;
+    padding: 28px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    position: relative;
+  }
+
+  .process-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 auto 16px;
+  }
+
+  .process-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .process-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── RACHAT ─── */
+  .rachat-block {
+    background: linear-gradient(135deg, #0D1A3A 0%, #0A0A0F 100%);
+    border: 1px solid rgba(240,165,0,.25);
+    border-radius: 16px;
+    padding: 40px 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .rachat-icon { font-size: 56px; flex-shrink: 0; }
+
+  .rachat-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .rachat-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+
+  .rachat-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .rachat-tag {
+    background: rgba(240,165,0,.1);
+    border: 1px solid rgba(240,165,0,.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ─── AVIS ─── */
+  .avis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .avis-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+
+  .stars { color: #FFB800; font-size: 16px; margin-bottom: 12px; }
+
+  .avis-text {
+    font-size: 14px;
+    color: var(--chrome);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .avis-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avis-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .avis-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .avis-vehicle {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ─── RDV ─── */
+  .rdv-section {
+    background: linear-gradient(135deg, #0A1228, #0A0A0F);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rdv-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 72px 24px;
+  }
+
+  .rdv-form {
+    background: var(--card);
+    border: 1px solid rgba(30,111,255,.2);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  input, select, textarea {
+    background: var(--card2);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(136,153,170,.5);
+  }
+
+  select option { background: var(--dark); }
+
+  textarea { resize: vertical; min-height: 100px; }
+
+  .btn-whatsapp {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 24px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-whatsapp:hover { background: #1ebe5a; transform: translateY(-1px); }
+
+  .rdv-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+
+  /* ─── CONTACT BAR ─── */
+  .contact-bar {
+    background: var(--blue);
+    padding: 28px 24px;
+  }
+
+  .contact-bar-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .contact-bar-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .contact-bar-text span { opacity: .8; font-size: 14px; display: block; font-family: 'Inter'; font-weight: 400; }
+
+  .contact-bar-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .contact-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.15);
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background .2s;
+  }
+
+  .contact-chip:hover { background: rgba(255,255,255,.25); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  .footer-info {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .rachat-block { flex-direction: column; text-align: center; }
+    .contact-bar-inner { flex-direction: column; text-align: center; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">CGD <span>AUTO</span></div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#rachat">Rachat</a>
+    <a href="#avis">Avis</a>
+    <a href="#rdv" class="nav-cta">Prendre RDV</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="scan-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="dot-live"></div>
+      Disponible en Île-de-France
+    </div>
+    <h1>
+      VOTRE VOITURE<br>
+      <span class="blue">DIAGNOSTIQUÉE</span><br>
+      <span class="chrome">EN MOINS D'1H</span>
+    </h1>
+    <p class="hero-desc">Diagnostic électronique professionnel, orientation vers les bons pros, rachat toutes conditions. Moins cher qu'un garage, aussi fiable.</p>
+    <div class="hero-btns">
+      <a href="#rdv" class="btn-primary">📅 Prendre rendez-vous</a>
+      <a href="#services" class="btn-secondary">Voir nos services →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">+50</span>
+        <span class="stat-label">Véhicules diagnostiqués</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">7j/7</span>
+        <span class="stat-label">Disponibilité</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">IDF</span>
+        <span class="stat-label">Zone d'intervention</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-header">
+    <span class="section-eyebrow">Ce qu'on fait</span>
+    <h2 class="section-title">Nos Services & Tarifs</h2>
+    <p class="section-desc">Des prestations claires, des tarifs transparents — sans mauvaise surprise.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon-wrap">🔌</div>
+      <div class="service-name">Diagnostic Électronique</div>
+      <p class="service-desc">Lecture complète des codes défauts sur toutes les calculateurs du véhicule. Rapport clair fourni.</p>
+      <span class="service-price">À partir de 40€</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap">📊</div>
+      <div class="service-name">Analyse & Compte-rendu</div>
+      <p class="service-desc">Interprétation des codes, explication en langage clair, estimation du coût de réparation.</p>
+      <span class="service-price">Inclus</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap">🔧</div>
+      <div class="service-name">Orientation Mécanicien</div>
+      <p class="service-desc">Mise en relation avec un mécanicien de confiance dans votre secteur. Pas de commission cachée.</p>
+      <span class="service-price">Gratuit</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap">🎨</div>
+      <div class="service-name">Carrosserie & Jantes</div>
+      <p class="service-desc">Réseau de carrossiers et spécialistes jantes partenaires à tarifs négociés en IDF.</p>
+      <span class="service-price">Sur devis</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap">📍</div>
+      <div class="service-name">Déplacement à domicile</div>
+      <p class="service-desc">On vient chez vous ou là où est le véhicule. Disponible partout en Île-de-France.</p>
+      <span class="service-price">Frais selon distance</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap">🚗</div>
+      <div class="service-name">Toutes Marques</div>
+      <p class="service-desc">Françaises, allemandes, japonaises, coréennes — on intervient sur tous les véhicules du marché.</p>
+      <span class="service-price">Même tarif</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMENT CA MARCHE -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-eyebrow">Le process</span>
+    <h2 class="section-title">Simple, Rapide, Efficace</h2>
+    <p class="section-desc">Du premier contact au compte-rendu, tout se fait en moins d'une heure.</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="process-num">1</div>
+      <div class="process-title">Vous prenez RDV</div>
+      <p class="process-desc">Remplissez le formulaire ci-dessous — je reçois vos infos directement sur WhatsApp.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">2</div>
+      <div class="process-title">Je me déplace</div>
+      <p class="process-desc">Je viens à l'adresse indiquée avec mon équipement. Partout en IDF.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">3</div>
+      <div class="process-title">Diagnostic & rapport</div>
+      <p class="process-desc">Lecture des codes, analyse complète, explication claire de la panne et des solutions.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">4</div>
+      <div class="process-title">Solution trouvée</div>
+      <p class="process-desc">Réparation sur place si possible, sinon orientation vers le bon professionnel au meilleur prix.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RACHAT -->
+<section class="section" id="rachat">
+  <div class="section-header">
+    <span class="section-eyebrow">Rachat</span>
+    <h2 class="section-title">On Rachète Votre Véhicule</h2>
+  </div>
+  <div class="rachat-block">
+    <div class="rachat-icon">🚘</div>
+    <div style="flex:1">
+      <div class="rachat-title">TOUS ÉTATS ACCEPTÉS</div>
+      <p class="rachat-desc">En panne, accidenté, non roulant, épave — peu importe l'état de votre véhicule, on vous fait une estimation gratuite et un paiement rapide. Pas de mauvaise surprise, pas de frais cachés.</p>
+      <div class="rachat-tags">
+        <span class="rachat-tag">✓ Estimation gratuite</span>
+        <span class="rachat-tag">✓ Paiement rapide</span>
+        <span class="rachat-tag">✓ Véhicule en panne OK</span>
+        <span class="rachat-tag">✓ Épave OK</span>
+        <span class="rachat-tag">✓ Toutes marques</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AVIS -->
+<section class="section" id="avis">
+  <div class="section-header">
+    <span class="section-eyebrow">Ils nous font confiance</span>
+    <h2 class="section-title">Avis Clients</h2>
+    <p class="section-desc">Des vraies personnes, de vraies pannes résolues.</p>
+  </div>
+  <div class="avis-grid">
+    <div class="avis-card">
+      <div class="stars">★★★★★</div>
+      <p class="avis-text">"Rapide et professionnel. Il a trouvé la panne en 20 minutes là où le garage me demandait 3 jours d'attente. Je recommande à 100%."</p>
+      <div class="avis-author">
+        <div class="avis-avatar">KD</div>
+        <div>
+          <div class="avis-name">Karim D.</div>
+          <div class="avis-vehicle">Peugeot 308 – Villepinte</div>
+        </div>
+      </div>
+    </div>
+    <div class="avis-card">
+      <div class="stars">★★★★★</div>
+      <p class="avis-text">"Super service ! Déplacement rapide, diagnostic clair, et il m'a évité une arnaque chez un garage. Tarif très correct."</p>
+      <div class="avis-author">
+        <div class="avis-avatar">SR</div>
+        <div>
+          <div class="avis-name">Sarah R.</div>
+          <div class="avis-vehicle">Renault Clio – Poissy</div>
+        </div>
+      </div>
+    </div>
+    <div class="avis-card">
+      <div class="stars">★★★★★</div>
+      <p class="avis-text">"J'avais un voyant allumé depuis des semaines. En 1h c'était réglé. Très disponible, répond vite sur WhatsApp. Merci !"</p>
+      <div class="avis-author">
+        <div class="avis-avatar">TM</div>
+        <div>
+          <div class="avis-name">Thomas M.</div>
+          <div class="avis-vehicle">Volkswagen Golf – Argenteuil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RDV -->
+<div class="rdv-section" id="rdv">
+  <div class="rdv-wrap">
+    <div class="section-header">
+      <span class="section-eyebrow">Rendez-vous</span>
+      <h2 class="section-title">Prenez Rendez-vous</h2>
+      <p class="section-desc">Remplissez le formulaire — je reçois vos infos directement sur WhatsApp et vous rappelle dans l'heure.</p>
+    </div>
+    <div class="rdv-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Votre prénom *</label>
+          <input type="text" id="f-prenom" placeholder="Ex : Mohamed">
+        </div>
+        <div class="form-group">
+          <label>Votre téléphone *</label>
+          <input type="tel" id="f-tel" placeholder="06 XX XX XX XX">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Marque du véhicule *</label>
+          <input type="text" id="f-marque" placeholder="Ex : Renault, Peugeot...">
+        </div>
+        <div class="form-group">
+          <label>Modèle *</label>
+          <input type="text" id="f-modele" placeholder="Ex : Clio, 308...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Type de prestation *</label>
+          <select id="f-prestation">
+            <option value="">-- Choisir --</option>
+            <option>Diagnostic électronique</option>
+            <option>Lecture code défaut</option>
+            <option>Orientation mécanicien</option>
+            <option>Rachat véhicule</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ville / Adresse *</label>
+          <input type="text" id="f-adresse" placeholder="Ex : Poissy 78300">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:20px">
+        <label>Description de la panne / demande</label>
+        <textarea id="f-panne" placeholder="Décrivez le problème : voyant allumé, bruit, symptôme..."></textarea>
+      </div>
+      <button class="btn-whatsapp" onclick="envoyerRDV()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Envoyer ma demande sur WhatsApp
+      </button>
+      <p class="rdv-note">📞 Ou appelez directement : <strong>07 82 65 36 45</strong> · Réponse en moins d'1h</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT BAR -->
+<div class="contact-bar">
+  <div class="contact-bar-inner">
+    <div class="contact-bar-text">
+      On est disponibles maintenant
+      <span>Réponse rapide garantie · 7j/7</span>
+    </div>
+    <div class="contact-bar-links">
+      <a href="tel:0782653645" class="contact-chip">📞 07 82 65 36 45</a>
+      <a href="https://wa.me/33782653645" class="contact-chip" target="_blank">💬 WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CGD AUTO</div>
+  <div class="footer-info">
+    Diagnostic automobile · Île-de-France<br>
+    Micro-entreprise · SIREN 932 171 036<br>
+    <span style="color:#3a3a5a; font-size:11px">© 2025 CGD Auto – Tous droits réservés</span>
+  </div>
+</footer>
+
+<script>
+function envoyerRDV() {
+  const prenom    = document.getElementById('f-prenom').value.trim();
+  const tel       = document.getElementById('f-tel').value.trim();
+  const marque    = document.getElementById('f-marque').value.trim();
+  const modele    = document.getElementById('f-modele').value.trim();
+  const prestation= document.getElementById('f-prestation').value;
+  const adresse   = document.getElementById('f-adresse').value.trim();
+  const panne     = document.getElementById('f-panne').value.trim();
+
+  if (!prenom || !tel || !marque || !modele || !prestation || !adresse) {
+    alert('Merci de remplir tous les champs obligatoires (*)');
+    return;
+  }
+
+  const msg = `🚗 *NOUVELLE DEMANDE CGD AUTO*
+
+👤 *Prénom :* ${prenom}
+📞 *Téléphone :* ${tel}
+
+🚘 *Véhicule :* ${marque} ${modele}
+🔧 *Prestation :* ${prestation}
+📍 *Adresse :* ${adresse}
+
+${panne ? `📝 *Panne / Demande :*\n${panne}` : ''}
+
+_Envoyé via cgdauto.github.io_`;
+
+  const encoded = encodeURIComponent(msg);
+  window.open(`https://wa.me/33782653645?text=${encoded}`, '_blank');
+}
+</script>
+
+</body>
+</html>
